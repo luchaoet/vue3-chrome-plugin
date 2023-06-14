@@ -1,72 +1,38 @@
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const path = require("path");
-const fs = require("fs");
-// const ZipPlugin = require('zip-webpack-plugin');
-
-const pagesObj = {
-  popup: {
-    entry: 'src/popup/index.ts',
-    template: 'public/index.html',
-    filename: 'popup.html'
-  },
-  options: {
-    entry: 'src/options/index.ts',
-    template: 'public/index.html',
-    filename: 'options.html'
-  },
-  devtools: {
-    entry: 'src/devtools/index.ts',
-    template: 'public/index.html',
-    filename: 'devtools.html'
-  },
-  panel1: {
-    entry: 'src/devtools/panel1/index.ts',
-    template: "public/index.html",
-    filename: 'panel1.html'
-  },
-  panel2: {
-    entry: 'src/devtools/panel2/index.ts',
-    template: "public/index.html",
-    filename: 'panel2.html'
-  }
-};
+const ZipPlugin = require('zip-webpack-plugin');
+const package = require('./package.json')
 
 const NODE_ENV = process.env.NODE_ENV;
 
-const plugins = [
-  // 配置静态文件
-  CopyWebpackPlugin([{
-    from: path.resolve("src/static"),
-    to: path.resolve("dist/static")
-  }]),
-  // 配置manifest文件
-  CopyWebpackPlugin([{
-    from: path.resolve(`src/manifest.${NODE_ENV}.json`),
-    to: `${path.resolve("dist")}/manifest.json`
-  }])
-]
-
-// // 开发环境将热加载文件复制到dist文件夹
-// if (process.env.NODE_ENV !== 'production') {
-//   plugins.push(
-//     CopyWebpackPlugin([{
-//       from: path.resolve("src/background/hot-reload.ts"),
-//       to: path.resolve("dist/background")
-//     }])
-//   )
-// }
-// // 生产环境打包dist为zip
-// else if (process.env.NODE_ENV === 'production') {
-//   plugins.push(
-//     new ZipPlugin({
-//       path: path.resolve("dist"),
-//       filename: 'dist.zip',
-//     })
-//   )
-// }
-
 module.exports = {
-  pages: pagesObj,
+  pages: {
+    popup: {
+      entry: 'src/popup/index.ts',
+      template: 'public/index.html',
+      filename: 'popup.html'
+    },
+    options: {
+      entry: 'src/options/index.ts',
+      template: 'public/index.html',
+      filename: 'options.html'
+    },
+    devtools: {
+      entry: 'src/devtools/index.ts',
+      template: 'public/index.html',
+      filename: 'devtools.html'
+    },
+    panel1: {
+      entry: 'src/devtools/panel1/index.ts',
+      template: "public/index.html",
+      filename: 'panel1.html'
+    },
+    panel2: {
+      entry: 'src/devtools/panel2/index.ts',
+      template: "public/index.html",
+      filename: 'panel2.html'
+    }
+  },
   // 生产环境是否生成 sourceMap 文件
   productionSourceMap: false,
   configureWebpack: {
@@ -90,12 +56,33 @@ module.exports = {
     output: {
       filename: 'js/[name].js'
     },
-    plugins,
+    plugins: [
+      // 配置静态文件
+      CopyWebpackPlugin([{
+        from: path.resolve("src/static"),
+        to: path.resolve("dist/static")
+      }]),
+      // 配置manifest文件
+      CopyWebpackPlugin([{
+        from: path.resolve(`src/manifest.${NODE_ENV}.json`),
+        to: `${path.resolve("dist")}/manifest.json`
+      }]),
+      // 生产环境打包dist为zip
+      // new ZipPlugin({
+      //   path: path.resolve("dist"),
+      //   filename: `${package.name || 'dist'}.zip`,
+      // })
+    ]
   },
   css: {
+    loaderOptions: {
+      sass: {
+        additionalData: `@use "@/styles/element.scss";`
+      }
+    },
     extract: {
       filename: 'css/[name].css'
-    }
+    },
   },
   chainWebpack: config => {
     // 处理字体文件名，去除hash值

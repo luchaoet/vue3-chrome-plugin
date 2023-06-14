@@ -1,7 +1,11 @@
 <template>
-	<div :class="$style.wrapper">popup</div>
-  <el-button>23</el-button>
+<el-config-provider namespace="ch">
+	<div :class="$style.wrapper">
+		<span>popup</span>
+	</div>
+	<el-button>23</el-button>
 	<div class="g-fs-20 g-p-20">2</div>
+</el-config-provider>
 </template>
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "vue";
@@ -20,9 +24,11 @@ export default defineComponent({
 });
 </script>
 
-<style module>
+<style lang="scss" module>
 .wrapper {
-	color: #2c3e50;
 	font-size: 30px;
+	span {
+		color: #2c3e50;
+	}
 }
 </style>

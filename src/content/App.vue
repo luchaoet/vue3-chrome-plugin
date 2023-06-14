@@ -1,5 +1,7 @@
 <template>
-	<div :class="$style.wrapper">test</div>
+	<el-config-provider namespace="ch">
+		<div :class="$style.wrapper">test</div>
+	</el-config-provider>
 </template>
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "vue";
@@ -17,7 +19,7 @@ export default defineComponent({
 	},
 });
 </script>
-<style module>
+<style lang="scss" module>
 .wrapper {
 	color: #2c3e50;
 	width: 200px;
