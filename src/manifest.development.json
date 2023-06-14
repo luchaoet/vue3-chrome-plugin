@@ -1,0 +1,42 @@
+{
+    "manifest_version": 2,
+    "name": "luchao-chrome-test",
+    "description": "Chrome Extension by Vue3",
+    "version": "1.0.0",
+    "options_page": "options.html",
+    "homepage_url": "https://www.luchaoet.com",
+    "icons": {
+        "16": "static/images/logo.png",
+        "48": "static/images/logo.png",
+        "128": "static/images/logo.png"
+    },
+    "devtools_page": "devtools.html",
+    "web_accessible_resources": [
+        "fonts/element-icons.woff",
+        "fonts/element-icons.ttf"
+    ],
+    "background": {
+        "scripts": [
+            "js/background/hot-reload.js",
+            "js/background/index.js"
+        ]
+    },
+    "browser_action": {
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "js/content.js"
+            ],
+            "css": [
+                "css/content.css"
+            ],
+            "run_at": "document_end"
+        }
+    ],
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
